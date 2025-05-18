@@ -1,5 +1,6 @@
 package com.FullStack.GestionUsuarios.Service;
 
+
 import com.FullStack.GestionUsuarios.Model.User;
 import com.FullStack.GestionUsuarios.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,7 @@ public class UserService {
             usuario.setName(usuarioActualizado.getName());
             usuario.setEmail(usuarioActualizado.getEmail());
             usuario.setTelefono(usuarioActualizado.getTelefono());
-            usuario.setActivo(usuarioActualizado.isActivo());
-            usuario.setRol(usuarioActualizado.getRol());   
-            usuario.setCiudad(usuarioActualizado.getCiudad());             
+            usuario.setActivo(usuarioActualizado.isActivo());             
             return userRepository.save(usuario);
         }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
@@ -54,6 +53,5 @@ public class UserService {
             return userRepository.save(user);
         }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
-    
  
 }

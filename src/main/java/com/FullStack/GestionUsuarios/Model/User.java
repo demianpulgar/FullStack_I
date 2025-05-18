@@ -2,7 +2,6 @@ package com.FullStack.GestionUsuarios.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
-@Table(name = "usuarios")
 @Entity
 @Data
 @NoArgsConstructor
