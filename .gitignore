@@ -32,6 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 
-#Ignorar la wallet
-
-!**/src/main/resources/Wallet/WalletGestionUsuarios
