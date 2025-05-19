@@ -33,4 +33,5 @@ build/
 .vscode/
 
 #Ignorar la wallet
-/Users/dpulgar/Desktop/GestionUsuarios/src/main/resources/Wallet/WalletGestionUsuarios
+
+!**/src/main/resources/Wallet/WalletGestionUsuarios
