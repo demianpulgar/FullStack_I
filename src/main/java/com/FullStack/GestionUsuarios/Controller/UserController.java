@@ -1,10 +1,18 @@
 package com.FullStack.GestionUsuarios.Controller;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.FullStack.GestionUsuarios.Model.User;
 import com.FullStack.GestionUsuarios.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -26,6 +34,10 @@ public class UserController {
     public User crearUser(@RequestBody User user){
         return userService.crearUsuario(user);
     }
+    @PostMapping("/crear/varios")
+    public List<User> crearVariosUser(@RequestBody List<User> users){
+        return userService.crearUsuarios(users);
+    }
     @PutMapping("/actualizar/{id}")
     public User actualizarUser(@PathVariable Long id, @RequestBody User user){
         return userService.actualizarUsuario(id, user);
@@ -42,6 +54,4 @@ public class UserController {
     public User activarUser(@PathVariable Long id) {
         return userService.activarUsuario(id);
     }
-    
-    
 }
