@@ -59,6 +59,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Spring Boot Starter Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Spring Boot Starter Test for unit and integration testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
