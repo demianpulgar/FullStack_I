@@ -9,47 +9,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/usuarios/listar", "/api/usuarios/encontrar/**")
-                    .hasAnyRole("ADMIN", "PROFESOR")
-                .requestMatchers("/api/usuarios/**")
-                    .hasRole("ADMIN")
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/usuarios/listar").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
-            .httpBasic(httpBasic -> httpBasic
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(401);
-                    response.getWriter().write("Unauthorized");
-                })
-            );
+            .addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    @Bean
-    public org.springframework.security.core.userdetails.UserDetailsService users() {
-        var uds = new org.springframework.security.provisioning.InMemoryUserDetailsManager();
 
-        uds.createUser(org.springframework.security.core.userdetails.User
-            .withUsername("admin")
-            .password("{noop}admin123")
-            .roles("ADMIN")
-            .build());
-
-        uds.createUser(org.springframework.security.core.userdetails.User
-            .withUsername("profesor")
-            .password("{noop}profesor123")
-            .roles("PROFESOR")
-            .build());
-
-        uds.createUser(org.springframework.security.core.userdetails.User
-            .withUsername("estudiante")
-            .password("{noop}estudiante123")
-            .roles("STUDENT")
-            .build());
-        return uds;
-    }
 }
