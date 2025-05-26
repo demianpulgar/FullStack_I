@@ -1,4 +1,4 @@
-Documentación del Proyecto: Gestión de Usuarios
+        Documentación del Proyecto: Gestión de Usuarios
 1. Estructura del Proyecto
 Model
 Define las entidades que representan las tablas de la base de datos.
@@ -103,6 +103,7 @@ Ejemplo:
 <!-- ...otras dependencias... -->
 
 4. Endpoints
+       
 | Método HTTP | Endpoint                        | Descripción                    |
 | ----------- | ------------------------------- | ------------------------------ |
 | GET         | `/api/usuarios/listar`          | Lista todos los usuarios       |
