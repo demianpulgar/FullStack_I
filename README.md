@@ -103,14 +103,16 @@ Ejemplo:
 <!-- ...otras dependencias... -->
 
 4. Endpoints
-Método	Endpoint	Descripción
-GET	/api/usuarios/listar	          Lista todos los usuarios
-GET	/api/usuarios/encontrar/{id}	  Busca usuario por ID
-POST	/api/usuarios/crear	          Crea un nuevo usuario
-POST	/api/usuarios/crear/varios	  Crea varios usuarios
-PUT	/api/usuarios/actualizar/{id}	  Actualiza un usuario existente
-DELETE	/api/usuarios/deleate/{id}	Elimina un usuario
-PUT	/api/usuarios/suspender/{id}	  Suspende un usuario
-PUT	/api/usuarios/activar/{id}	    Activa un usuario
+| Método HTTP | Endpoint                        | Descripción                    |
+| ----------- | ------------------------------- | ------------------------------ |
+| GET         | `/api/usuarios/listar`          | Lista todos los usuarios       |
+| GET         | `/api/usuarios/encontrar/{id}`  | Buscar usuario por ID          |
+| POST        | `/api/usuarios/crear`           | Crea un nuevo usuario          |
+| POST        | `/api/usuarios/crear/varios`    | Crea varios usuarios           |
+| PUT         | `/api/usuarios/actualizar/{id}` | Actualiza un usuario existente |
+| DELETE      | `/api/usuarios/deleate/{id}`    | Elimina un usuario             |
+| PUT         | `/api/usuarios/suspender/{id}`  | Suspende un usuario            |
+| PUT         | `/api/usuarios/activar/{id}`    | Activa un usuario              |
+
 
 
