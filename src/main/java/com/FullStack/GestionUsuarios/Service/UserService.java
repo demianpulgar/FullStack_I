@@ -32,13 +32,13 @@ public class UserService {
         return userRepository.findById(id).map(usuario -> {
             usuario.setName(usuarioActualizado.getName());
             usuario.setEmail(usuarioActualizado.getEmail());
-            usuario.setPassword(usuarioActualizado.getPassword());  
             usuario.setTelefono(usuarioActualizado.getTelefono());
             usuario.setRol(usuarioActualizado.getRol());
+            usuario.setUserPassword(usuarioActualizado.getUserPassword());
             usuario.setCiudad(usuarioActualizado.getCiudad());
             usuario.setActivo(usuarioActualizado.isActivo());
             
-                       
+                     
             return userRepository.save(usuario);
         }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Users")
+@Table(name = "USERS")
 public class User {
 
     @Id
@@ -16,10 +16,11 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    private String password;
     private String telefono;
     private String rol;
     private String ciudad;
     @Builder.Default
-    private boolean activo = true;   
+    private boolean activo = true;
+    @Column(name = "USERPASSWORD")   
+    private String UserPassword;
 }
