@@ -44,8 +44,6 @@ Incluye validación de datos y control de errores personalizado.
 src/ └── main/ ├── java/ │ └── com/ │ └── FullStack/ │ └── GestionUsuarios/ │ ├── Controller/ │ │ └── UserController.java │ ├── Model/ │ │ └── User.java │ ├── Repository/ │ │ └── UserRepository.java │ ├── Service/ │ │ └── UserService.java │ └── GestionUsuariosApplication.java └── resources/ ├── application.properties └── ... pom.xml
 
 
----
-
 ## 🧩 Explicación de Componentes
 
 ### Modelo (Model)
@@ -101,7 +99,10 @@ logging.level.com.zaxxer.hikari=DEBUG
 logging.level.java.sql=DEBUG
 spring.output.ansi.enabled=ALWAYS
 
+```
+
 pom.xml
+
 Incluye dependencias principales:
 
 Spring Boot Starter Web
