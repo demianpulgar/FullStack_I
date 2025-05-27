@@ -20,6 +20,7 @@ El sistema permite gestionar usuarios a través de una API RESTful. Cada usuario
 
 Estructura del Proyecto
 
+
 src/
  └── main/
      ├── java/
@@ -39,6 +40,7 @@ src/
           ├── application.properties
           └── ...
 pom.xml
+
 
 Explicación de Componentes
 Modelo (Model)
@@ -95,6 +97,7 @@ Lombok: Para reducir el código boilerplate.
 Jakarta Validation: Para validaciones de datos.
 Spring Boot Starter Validation: Para integrar validaciones en controladores.
 Endpoints y Funcionalidad
+
 
 Método	Endpoint	Descripción
 GET	/api/usuarios/listar	Lista todos los usuarios
