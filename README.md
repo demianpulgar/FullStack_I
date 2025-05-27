@@ -41,7 +41,25 @@ Incluye validación de datos y control de errores personalizado.
 
 ## 🏗️ Estructura del Proyecto
 
-src/ └── main/ ├── java/ │ └── com/ │ └── FullStack/ │ └── GestionUsuarios/ │ ├── Controller/ │ │ └── UserController.java │ ├── Model/ │ │ └── User.java │ ├── Repository/ │ │ └── UserRepository.java │ ├── Service/ │ │ └── UserService.java │ └── GestionUsuariosApplication.java └── resources/ ├── application.properties └── ... pom.xml
+src/
+└── main/
+    ├── java/
+    │   └── com/
+    │       └── FullStack/
+    │           └── GestionUsuarios/
+    │               ├── Controller/
+    │               │   └── UserController.java
+    │               ├── Model/
+    │               │   └── User.java
+    │               ├── Repository/
+    │               │   └── UserRepository.java
+    │               ├── Service/
+    │               │   └── UserService.java
+    │               └── GestionUsuariosApplication.java
+    └── resources/
+        ├── application.properties
+        └── ...
+pom.xml
 
 
 ## 🧩 Explicación de Componentes
@@ -112,16 +130,17 @@ Lombok
 Jakarta Validation
 Spring Boot Starter Validation
 
-🔗 Endpoints y Funcionalidad
-Método	Endpoint	Descripción
-GET	/api/usuarios/listar	Lista todos los usuarios
-GET	/api/usuarios/encontrar/{id}	Busca un usuario por ID
-POST	/api/usuarios/crear	Crea un usuario nuevo
-POST	/api/usuarios/crear/varios	Crea varios usuarios a la vez
-PUT	/api/usuarios/actualizar/{id}	Actualiza un usuario existente
-DELETE	/api/usuarios/deleate/{id}	Elimina un usuario por ID
-PUT	/api/usuarios/suspender/{id}	Suspende (desactiva) un usuario
-PUT	/api/usuarios/activar/{id}	Activa un usuario previamente suspendido
+| Método   | Endpoint                        | Descripción                                |
+| -------- | ------------------------------- | ------------------------------------------ |
+| `GET`    | `/api/usuarios/listar`          | 📄 Lista todos los usuarios                |
+| `GET`    | `/api/usuarios/encontrar/{id}`  | 🔍 Busca un usuario por su ID              |
+| `POST`   | `/api/usuarios/crear`           | ➕ Crea un usuario nuevo                    |
+| `POST`   | `/api/usuarios/crear/varios`    | 🧩 Crea varios usuarios a la vez           |
+| `PUT`    | `/api/usuarios/actualizar/{id}` | ✏️ Actualiza un usuario existente          |
+| `DELETE` | `/api/usuarios/deleate/{id}`    | ❌ Elimina un usuario por su ID             |
+| `PUT`    | `/api/usuarios/suspender/{id}`  | 🚫 Suspende (desactiva) un usuario         |
+| `PUT`    | `/api/usuarios/activar/{id}`    | ✅ Activa un usuario previamente suspendido |
+
 
 🚨 Control de Errores
 Datos inválidos:
