@@ -1,5 +1,5 @@
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-spring.datasource.url=jdbc:oracle:thin:@s5yq3avkm7lhkqcv_high?TNS_ADMIN=/Users/dpulgar/Desktop/GestionUsuarios/src/main/resources/Wallet
+spring.datasource.url=jdbc:oracle:thin:@tns?TNS_ADMIN=C:/Users/demia/Desktop/FullStack_I-GestionUsuarios/src/main/resources/Wallet
 spring.datasource.username=${DB_USER}
 spring.datasource.password=${DB_PASSWORD}
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.OracleDialect
