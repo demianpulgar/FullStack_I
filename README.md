@@ -1,78 +1,96 @@
-Sistema de Gestión de Usuarios
-Este proyecto es una API REST desarrollada con Spring Boot para la gestión de usuarios, que permite crear, listar, buscar, actualizar, eliminar, suspender y activar usuarios en una base de datos Oracle. El sistema implementa buenas prácticas de validación, control de errores y manejo de dependencias.
+# Sistema de Gestión de Usuarios
 
-Tabla de Contenidos
-Descripción General
-Estructura del Proyecto
-Explicación de Componentes
-Modelo (Model)
-Repositorio (Repository)
-Servicio (Service)
-Controlador (Controller)
-application.properties
-pom.xml
-Endpoints y Funcionalidad
-Control de Errores
-Dependencias y Librerías
+API REST desarrollada con **Spring Boot** para la gestión de usuarios en una base de datos Oracle. Permite crear, listar, buscar, actualizar, eliminar, suspender y activar usuarios.
 
-Descripción General
-El sistema permite gestionar usuarios a través de una API RESTful. Cada usuario tiene atributos como nombre, email, teléfono, rol, ciudad, estado (activo/suspendido) y contraseña. El sistema valida los datos de entrada, asegura unicidad en email y teléfono, y responde con mensajes claros ante errores.
+---
 
-Estructura del Proyecto
+## 🗂️ Tabla de Contenidos
+
+- [Descripción General](#descripción-general)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Explicación de Componentes](#explicación-de-componentes)
+  - [Modelo (Model)](#modelo-model)
+  - [Repositorio (Repository)](#repositorio-repository)
+  - [Servicio (Service)](#servicio-service)
+  - [Controlador (Controller)](#controlador-controller)
+  - [application.properties](#applicationproperties)
+  - [pom.xml](#pomxml)
+- [Endpoints y Funcionalidad](#endpoints-y-funcionalidad)
+- [Control de Errores](#control-de-errores)
+- [Dependencias y Librerías](#dependencias-y-librerías)
+- [Ejemplo de Respuestas](#ejemplo-de-respuestas)
+
+---
+
+## 📋 Descripción General
+
+El sistema permite gestionar usuarios a través de una API RESTful.  
+Cada usuario tiene los siguientes atributos principales:
+
+- **Nombre**
+- **Email**
+- **Teléfono**
+- **Rol**
+- **Ciudad**
+- **Estado** (activo/suspendido)
+- **Contraseña**
+
+Incluye validación de datos y control de errores personalizado.
+
+---
+
+## 🏗️ Estructura del Proyecto
+
+src/ └── main/ ├── java/ │ └── com/ │ └── FullStack/ │ └── GestionUsuarios/ │ ├── Controller/ │ │ └── UserController.java │ ├── Model/ │ │ └── User.java │ ├── Repository/ │ │ └── UserRepository.java │ ├── Service/ │ │ └── UserService.java │ └── GestionUsuariosApplication.java └── resources/ ├── application.properties └── ... pom.xml
 
 
-src/
- └── main/
-     ├── java/
-     │    └── com/
-     │         └── FullStack/
-     │              └── GestionUsuarios/
-     │                   ├── Controller/
-     │                   │    └── UserController.java
-     │                   ├── Model/
-     │                   │    └── User.java
-     │                   ├── Repository/
-     │                   │    └── UserRepository.java
-     │                   ├── Service/
-     │                   │    └── UserService.java
-     │                   └── GestionUsuariosApplication.java
-     └── resources/
-          ├── application.properties
-          └── ...
-pom.xml
+---
 
+## 🧩 Explicación de Componentes
 
-Explicación de Componentes
-Modelo (Model)
-User.java
-Define la entidad User con anotaciones JPA y validaciones.
-Campos: id, name, email, telefono, rol, ciudad, activo, userPassword.
-Validaciones:
-@NotBlank para campos obligatorios.
-@Email para formato de email.
-@Column(unique = true) para email y teléfono únicos.
+### Modelo (Model)
 
-Repositorio (Repository)
-UserRepository.java
-Extiende JpaRepository<User, Long>, proporcionando métodos CRUD automáticos para la entidad User.
+**`User.java`**
+- Define la entidad `User` con anotaciones JPA y validaciones.
+- **Campos:** `id`, `name`, `email`, `telefono`, `rol`, `ciudad`, `activo`, `userPassword`.
+- **Validaciones:**  
+  - `@NotBlank` para campos obligatorios  
+  - `@Email` para el campo email  
+  - `@Column(unique = true)` para email y teléfono únicos
 
-Servicio (Service)
-UserService.java
-Contiene la lógica de negocio:
+---
 
-Métodos para crear, listar, buscar, actualizar, eliminar, suspender y activar usuarios.
-Valida los datos antes de guardar o actualizar.
-Lanza excepciones si el usuario no existe o si hay violaciones de unicidad.
-Controlador (Controller)
-UserController.java
-Expone los endpoints REST:
+### Repositorio (Repository)
 
-Recibe y valida las solicitudes.
-Llama a los métodos del servicio.
-Controla los errores y devuelve mensajes personalizados usando ResponseEntity.
-application.properties
-Configura la conexión a la base de datos y el comportamiento de la aplicación:
+**`UserRepository.java`**
+- Extiende `JpaRepository<User, Long>`, proporcionando métodos CRUD automáticos.
 
+---
+
+### Servicio (Service)
+
+**`UserService.java`**
+- Lógica de negocio:  
+  - Crear, listar, buscar, actualizar, eliminar, suspender y activar usuarios.
+  - Validación de datos antes de guardar o actualizar.
+  - Manejo de excepciones por unicidad o inexistencia.
+
+---
+
+### Controlador (Controller)
+
+**`UserController.java`**
+- Expone los endpoints REST.
+- Valida solicitudes y errores.
+- Usa `ResponseEntity` para mensajes personalizados.
+
+---
+
+### application.properties
+
+- Configuración de la base de datos y logs:
+
+```properties
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.datasource.url=jdbc:oracle:thin:@<host>_high?TNS_ADMIN=<ruta_wallet>
 spring.datasource.username=${DB_USER}
@@ -83,22 +101,17 @@ logging.level.com.zaxxer.hikari=DEBUG
 logging.level.java.sql=DEBUG
 spring.output.ansi.enabled=ALWAYS
 
-Datasource: Configura el acceso a Oracle.
-Variables de entorno: Usa ${DB_USER} y ${DB_PASS} para mayor seguridad.
-Logging: Niveles de log para depuración.
-Colores: Habilita colores en la consola.
 pom.xml
-Define las dependencias del proyecto:
+Incluye dependencias principales:
 
-Spring Boot Starter Web: Para crear APIs REST.
-Spring Boot Starter Data JPA: Para acceso a datos con JPA/Hibernate.
-Oracle JDBC: Para conectarse a Oracle.
-Lombok: Para reducir el código boilerplate.
-Jakarta Validation: Para validaciones de datos.
-Spring Boot Starter Validation: Para integrar validaciones en controladores.
-Endpoints y Funcionalidad
+Spring Boot Starter Web
+Spring Boot Starter Data JPA
+Oracle JDBC
+Lombok
+Jakarta Validation
+Spring Boot Starter Validation
 
-
+🔗 Endpoints y Funcionalidad
 Método	Endpoint	Descripción
 GET	/api/usuarios/listar	Lista todos los usuarios
 GET	/api/usuarios/encontrar/{id}	Busca un usuario por ID
@@ -109,25 +122,24 @@ DELETE	/api/usuarios/deleate/{id}	Elimina un usuario por ID
 PUT	/api/usuarios/suspender/{id}	Suspende (desactiva) un usuario
 PUT	/api/usuarios/activar/{id}	Activa un usuario previamente suspendido
 
-Control de Errores
+🚨 Control de Errores
 Datos inválidos:
-Si los datos enviados no cumplen las validaciones, se devuelve un error 400 con detalles.
+Error 400 y detalles de validación.
 Email o teléfono repetido:
-Si se intenta crear/actualizar un usuario con email o teléfono ya registrado, se devuelve un error 400 con mensaje personalizado.
+Error 400 con mensaje personalizado.
 Usuario no encontrado:
-Si se intenta buscar, actualizar, eliminar, suspender o activar un usuario inexistente, se devuelve un error 404 con mensaje personalizado.
-Mensajes personalizados:
-Todos los errores relevantes devuelven un mensaje claro en el cuerpo de la respuesta, facilitando el consumo de la API.
+Error 404 con mensaje personalizado.
+Mensajes claros:
+Todos los errores devuelven mensajes descriptivos para facilitar el consumo de la API.
+📦 Dependencias y Librerías
+spring-boot-starter-web
+spring-boot-starter-data-jpa
+oracle-ojdbc8
+lombok
+spring-boot-starter-validation
+jakarta.validation
 
-Dependencias y Librerías
-spring-boot-starter-web: Para exponer endpoints REST.
-spring-boot-starter-data-jpa: Para persistencia y consultas a la base de datos.
-oracle-ojdbc8: Driver JDBC para Oracle.
-lombok: Anotaciones para reducir código repetitivo (getters, setters, constructores, etc.).
-spring-boot-starter-validation: Validación de datos en los controladores.
-jakarta.validation: Anotaciones de validación como @NotBlank, @Email, etc.
-
-Ejemplo de Respuestas
+🧪 Ejemplo de Respuestas
 Usuario encontrado:
 
 {
@@ -138,24 +150,7 @@ Usuario encontrado:
 }
 
 Usuario no encontrado:
+Usuario no encontrado con id: 99
 
-"Usuario no encontrado con id: 99"
-
-Error de email/telefono repetido:
-
-"El email o teléfono ya está registrado."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Error de email/teléfono repetido:
+El email o teléfono ya está registrado.
