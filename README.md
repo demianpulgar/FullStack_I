@@ -41,6 +41,7 @@ Incluye validación de datos y control de errores personalizado.
 
 ## 🏗️ Estructura del Proyecto
 
+
 src/
 └── main/
     ├── java/
@@ -60,6 +61,7 @@ src/
         ├── application.properties
         └── ...
 pom.xml
+
 
 
 ## 🧩 Explicación de Componentes
