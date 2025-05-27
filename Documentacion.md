@@ -42,25 +42,34 @@ Incluye validación de datos y control de errores personalizado.
 ## 🏗️ Estructura del Proyecto
 
 ```
-src/
-└── main/
-├── java/
-│   └── com/
-│       └── FullStack/
-│           └── GestionUsuarios/
-│               ├── Controller/
-│               │   └── UserController.java
-│               ├── Model/
-│               │   └── User.java
-│               ├── Repository/
-│               │   └── UserRepository.java
-│               ├── Service/
-│               │   └── UserService.java
-│               └── GestionUsuariosApplication.java
-└── resources/
-├── application.properties
-└── ...
-pom.xml
+FULLSTACK_I-GESTIONUSUARIOS/
+├── .mvn/
+├── .vscode/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── FullStack/
+│       │           └── GestionUsuarios/
+│       │               ├── Controller/
+│       │               │   └── UserController.java
+│       │               ├── Model/
+│       │               │   └── User.java
+│       │               ├── Repository/
+│       │               │   └── UserRepository.java
+│       │               ├── Service/
+│       │               │   └── UserService.java
+│       │               └── GestionUsuariosApplication.java
+│       └── resources/
+│           ├── Wallet/
+│           └── application.properties
+├── test/
+├── .gitattributes
+├── .gitignore
+├── mvnw
+├── mvnw.cmd
+└── pom.xml
+
 ```
 
 
