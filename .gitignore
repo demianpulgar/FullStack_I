@@ -36,3 +36,8 @@ build/
 src/main/resources/Wallet/
 src/main/resources/Wallet/**
 src/main/resources/application.properties
+
+###variables de entorno###
+.env
+src/main/resources/Wallet/
+target/
