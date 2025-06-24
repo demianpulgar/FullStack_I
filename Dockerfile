@@ -11,9 +11,6 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 COPY --from=builder /app/target/*.jar app.jar
-
 COPY src/main/resources/Wallet /app/Wallet
 
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD [ "java", "-jar", "app.jar", "--spring.profiles.active=${profiles-active}" ]
