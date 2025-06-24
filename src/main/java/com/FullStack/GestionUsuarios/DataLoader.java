@@ -1,16 +1,19 @@
 package com.FullStack.GestionUsuarios;
 
-import com.FullStack.GestionUsuarios.Model.User;
-import com.FullStack.GestionUsuarios.Repository.UserRepository;
+import java.util.Arrays;
+import java.util.Locale;
 
-import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
+import com.FullStack.GestionUsuarios.Model.User;
+import com.FullStack.GestionUsuarios.Repository.UserRepository;
+
+import net.datafaker.Faker;
 
 @Profile("dev")
 @Component
@@ -22,24 +25,39 @@ public class DataLoader implements CommandLineRunner {
     @Value("${USERS_TO_CREATE:250}")
     private int usersToCreate;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public void run(String... args) {
-        Faker faker = new Faker(new Locale("es"));
+        String[] profiles = env.getActiveProfiles();
+        boolean isDev = Arrays.asList(profiles).contains("dev");
+        if (!isDev) {
+            System.out.println("Perfil no es 'dev', no se cargan usuarios ficticios.");
+            return;
+        }
 
-        for (int i = 0; i < usersToCreate; i++) { // Inserta 20 usuarios ficticios
+        Faker faker = new Faker(new Locale("es"));
+        int creados = 0;
+
+        while (creados < usersToCreate) {
+            String email = "usuario" + creados + "@ejemplo.com";
+            String telefono = String.format("600%07d", creados); // Ejemplo: 6000000000, 6000000001, ...
+
             User usuario = new User();
             usuario.setName(faker.name().fullName());
-            usuario.setEmail(faker.internet().emailAddress());
-            usuario.setTelefono(faker.phoneNumber().cellPhone());
+            usuario.setEmail(email);
+            usuario.setTelefono(telefono);
             usuario.setRol(faker.options().option("ADMIN", "USER", "READER"));
             usuario.setCiudad(faker.address().city());
-            usuario.setActivo(true); // o faker.bool().bool()
+            usuario.setActivo(true);
             usuario.setUserPassword(faker.internet().password(8, 16));
 
             userRepository.save(usuario);
+            creados++;
         }
 
-        System.out.println("✔ Usuarios ficticios cargados correctamente.");
+        System.out.println("✔ Usuarios ficticios cargados correctamente: " + creados);
     }
 }
 
