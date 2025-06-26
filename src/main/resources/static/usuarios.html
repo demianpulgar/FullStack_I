@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fa;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+            padding: 30px 40px 40px 40px;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 18px;
+        }
+        .search-bar input {
+            padding: 8px 12px;
+            border: 1px solid #b2bec3;
+            border-radius: 6px 0 0 6px;
+            outline: none;
+            font-size: 15px;
+            width: 220px;
+            transition: border 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: #2980b9;
+        }
+        .search-bar button {
+            padding: 8px 16px;
+            border: none;
+            background: #2980b9;
+            color: #fff;
+            font-size: 15px;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .search-bar button:hover {
+            background: #1a5a8a;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.05);
+        }
+        th, td {
+            border: none;
+            padding: 12px 10px;
+            text-align: left;
+        }
+        th {
+            background: #2980b9;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        tr {
+            transition: background 0.2s;
+        }
+        tr:nth-child(even) {
+            background: #f2f6fa;
+        }
+        tr:hover:not(.highlighted):not(.json-row) {
+            background: #eaf1fb;
+        }
+        .user-id {
+            cursor: pointer;
+            color: #2980b9;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        tr.expanded {
+            background: #eaf1fb !important;
+        }
+        .json-details {
+            background: #f7f9fb;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            white-space: pre;
+            margin: 0;
+            padding: 14px 18px;
+            border-radius: 6px;
+            border: 1px solid #dfe6e9;
+            color: #2d3436;
+            font-size: 14px;
+        }
+        .pagination {
+            margin: 28px 0 0 0;
+            text-align: center;
+        }
+        .pagination button {
+            margin: 0 3px;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 5px;
+            background: #dfe6e9;
+            color: #2c3e50;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .pagination button.active-page {
+            background: #2980b9;
+            color: #fff;
+            font-weight: bold;
+        }
+        .pagination button:hover:not(.active-page) {
+            background: #b2bec3;
+        }
+        tr.highlighted {
+            background: #ffe082 !important;
+            transition: background 0.3s;
+        }
+        @media (max-width: 900px) {
+            .container { padding: 10px; }
+            th, td { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Usuarios</h1>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o ID...">
+            <button onclick="buscarUsuario()">Buscar</button>
+        </div>
+        <div id="usuarios-container"></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+    <script>
+        const API_URL = '/api/usuarios/listar';
+        const PAGE_SIZE = 20;
+        let usuarios = [];
+        let currentPage = 1;
+        let lastHighlightedRow = null;
+
+        async function fetchUsuarios() {
+            const res = await fetch(API_URL);
+            usuarios = await res.json();
+            renderTable();
+            renderPagination();
+        }
+
+        function renderTable() {
+            const container = document.getElementById('usuarios-container');
+            container.innerHTML = '';
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = start + PAGE_SIZE;
+            const pageUsuarios = usuarios.slice(start, end);
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Ciudad</th>
+                        <th>Activo</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            pageUsuarios.forEach(user => {
+                html += `
+                    <tr data-userid="${user.id}">
+                        <td class="user-id">${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.telefono}</td>
+                        <td>${user.rol}</td>
+                        <td>${user.ciudad}</td>
+                        <td>${user.activo ? 'Sí' : 'No'}</td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+
+            // Evento para expandir/cerrar JSON al hacer click en el ID
+            document.querySelectorAll('.user-id').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const tr = this.parentElement;
+                    const userId = tr.getAttribute('data-userid');
+                    const expanded = tr.classList.contains('expanded');
+                    // Quitar cualquier expansión previa
+                    document.querySelectorAll('tr.expanded').forEach(row => {
+                        row.classList.remove('expanded');
+                        if (row.nextSibling && row.nextSibling.classList && row.nextSibling.classList.contains('json-row')) {
+                            row.nextSibling.remove();
+                        }
+                    });
+                    if (!expanded) {
+                        tr.classList.add('expanded');
+                        const user = usuarios.find(u => u.id == userId);
+                        const jsonRow = document.createElement('tr');
+                        jsonRow.className = 'json-row';
+                        jsonRow.innerHTML = `<td colspan="7"><div class="json-details">${JSON.stringify(user, null, 2)}</div></td>`;
+                        tr.parentNode.insertBefore(jsonRow, tr.nextSibling);
+                    }
+                });
+            });
+
+            // Evento para quitar resaltado al pasar el mouse sobre la fila resaltada
+            document.querySelectorAll('tr.highlighted').forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    row.classList.remove('highlighted');
+                });
+            });
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(usuarios.length / PAGE_SIZE);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                if (i === currentPage) btn.className = 'active-page';
+                btn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                    renderPagination();
+                });
+                pagination.appendChild(btn);
+            }
+        }
+
+        function buscarUsuario() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!input) return;
+
+            // Buscar por ID exacto o nombre (parcial, insensible a mayúsculas)
+            let idx = usuarios.findIndex(u => u.id.toString() === input);
+            if (idx === -1) {
+                idx = usuarios.findIndex(u => u.name.toLowerCase().includes(input));
+            }
+            if (idx === -1) {
+                alert('Usuario no encontrado.');
+                return;
+            }
+
+            // Calcular página y resaltar
+            const page = Math.floor(idx / PAGE_SIZE) + 1;
+            currentPage = page;
+            renderTable();
+            renderPagination();
+
+            // Resaltar la fila encontrada
+            setTimeout(() => {
+                const pageStart = (currentPage - 1) * PAGE_SIZE;
+                const rowIdx = idx - pageStart;
+                const rows = document.querySelectorAll('#usuarios-container tbody tr');
+                if (rows[rowIdx]) {
+                    rows[rowIdx].classList.add('highlighted');
+                    // Quitar resaltado al pasar el mouse
+                    rows[rowIdx].addEventListener('mouseenter', function handler() {
+                        rows[rowIdx].classList.remove('highlighted');
+                        rows[rowIdx].removeEventListener('mouseenter', handler);
+                    });
+                }
+            }, 100);
+        }
+
+        fetchUsuarios();
+    </script>
+</body>
+</html>

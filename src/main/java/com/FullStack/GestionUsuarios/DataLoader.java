@@ -37,7 +37,7 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        Faker faker = new Faker(new Locale("es"));
+        Faker faker = new Faker(Locale.forLanguageTag("es"));
         int creados = 0;
 
         while (creados < usersToCreate) {
