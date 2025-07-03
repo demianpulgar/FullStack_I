@@ -149,11 +149,13 @@
         const PAGE_SIZE = 20;
         let usuarios = [];
         let currentPage = 1;
-        let lastHighlightedRow = null;
 
         async function fetchUsuarios() {
             const res = await fetch(API_URL);
-            usuarios = await res.json();
+            const data = await res.json();
+            // Solo extrae el array de usuarios, ignora enlaces y password
+            usuarios = (data._embedded && Array.isArray(data._embedded.userList)) ?
+                data._embedded.userList.map(({_links, userPassword, ...u}) => u) : [];
             renderTable();
             renderPagination();
         }
@@ -180,46 +182,26 @@
                 <tbody>
             `;
 
-            pageUsuarios.forEach(user => {
-                html += `
-                    <tr data-userid="${user.id}">
-                        <td class="user-id">${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>${user.telefono}</td>
-                        <td>${user.rol}</td>
-                        <td>${user.ciudad}</td>
-                        <td>${user.activo ? 'Sí' : 'No'}</td>
-                    </tr>
-                `;
-            });
+            if (pageUsuarios.length === 0) {
+                html += `<tr><td colspan="7" style="text-align:center;color:#888;">No hay usuarios para mostrar.</td></tr>`;
+            } else {
+                pageUsuarios.forEach(user => {
+                    html += `
+                        <tr data-userid="${user.id}">
+                            <td>${user.id}</td>
+                            <td>${user.name || user.nombre || '-'}</td>
+                            <td>${user.email || '-'}</td>
+                            <td>${user.telefono || '-'}</td>
+                            <td>${user.rol || '-'}</td>
+                            <td>${user.ciudad || '-'}</td>
+                            <td>${user.activo !== undefined ? (user.activo ? 'Sí' : 'No') : '-'}</td>
+                        </tr>
+                    `;
+                });
+            }
 
             html += `</tbody></table>`;
             container.innerHTML = html;
-
-            // Evento para expandir/cerrar JSON al hacer click en el ID
-            document.querySelectorAll('.user-id').forEach(cell => {
-                cell.addEventListener('click', function() {
-                    const tr = this.parentElement;
-                    const userId = tr.getAttribute('data-userid');
-                    const expanded = tr.classList.contains('expanded');
-                    // Quitar cualquier expansión previa
-                    document.querySelectorAll('tr.expanded').forEach(row => {
-                        row.classList.remove('expanded');
-                        if (row.nextSibling && row.nextSibling.classList && row.nextSibling.classList.contains('json-row')) {
-                            row.nextSibling.remove();
-                        }
-                    });
-                    if (!expanded) {
-                        tr.classList.add('expanded');
-                        const user = usuarios.find(u => u.id == userId);
-                        const jsonRow = document.createElement('tr');
-                        jsonRow.className = 'json-row';
-                        jsonRow.innerHTML = `<td colspan="7"><div class="json-details">${JSON.stringify(user, null, 2)}</div></td>`;
-                        tr.parentNode.insertBefore(jsonRow, tr.nextSibling);
-                    }
-                });
-            });
 
             // Evento para quitar resaltado al pasar el mouse sobre la fila resaltada
             document.querySelectorAll('tr.highlighted').forEach(row => {
@@ -233,6 +215,8 @@
             const totalPages = Math.ceil(usuarios.length / PAGE_SIZE);
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
+
+            if (totalPages <= 1) return;
 
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
@@ -252,9 +236,9 @@
             if (!input) return;
 
             // Buscar por ID exacto o nombre (parcial, insensible a mayúsculas)
-            let idx = usuarios.findIndex(u => u.id.toString() === input);
+            let idx = usuarios.findIndex(u => u.id && u.id.toString() === input);
             if (idx === -1) {
-                idx = usuarios.findIndex(u => u.name.toLowerCase().includes(input));
+                idx = usuarios.findIndex(u => (u.name || u.nombre || '').toLowerCase().includes(input));
             }
             if (idx === -1) {
                 alert('Usuario no encontrado.');
